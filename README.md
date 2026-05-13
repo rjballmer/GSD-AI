@@ -91,4 +91,4 @@ GSD-AI is execution infrastructure between those systems.
 
 ## License
 
-License TBD while the project is still forming.
+Apache License 2.0. See [`LICENSE`](LICENSE).
