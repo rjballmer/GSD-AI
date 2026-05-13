@@ -66,16 +66,24 @@ Verification around AI-generated signals, writes, scheduled jobs, public exports
 
 ## Current status
 
-This repo is in the architecture/prototype phase.
+**v0.1 local-first execution substrate in progress.**
 
-Planned first milestone:
+Built today:
 
-1. local workspace generator
-2. goal/work context contract
-3. signal schema and registry
-4. manual capture from pasted notes/files
-5. approval queue
-6. resume-from-here status command
+- local workspace generator
+- goal/workstream context contract
+- workstream creation command
+- machine-readable workspace index
+- signal and scope primitives
+- unit tests for workspace creation, context rendering, and signal fingerprinting
+
+Next milestone:
+
+1. signal registry
+2. manual capture from pasted notes/files
+3. approval queue
+4. `gsd-ai status` / resume-from-here command
+5. audit trail for approved writes
 
 See [`docs/roadmap.md`](docs/roadmap.md) for the phased build plan.
 
