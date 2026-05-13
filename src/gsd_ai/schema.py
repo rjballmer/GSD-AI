@@ -29,7 +29,7 @@ class SignalType(str, Enum):
 
 @dataclass(frozen=True)
 class ContextContract:
-    """Durable, inspectable state for a goal/workstream."""
+    """Durable, inspectable state for a project."""
 
     name: str
     purpose: str = ""
@@ -72,7 +72,7 @@ class Signal:
 
     signal_type: SignalType
     summary: str
-    workstream: str
+    project: str
     source: str
     confidence: str = "medium"
     scope: Scope = Scope.PRIVATE
@@ -82,5 +82,5 @@ class Signal:
     @property
     def fingerprint(self) -> str:
         slug = "-".join(self.summary.lower().split())[:80].strip("-")
-        workstream = "-".join(self.workstream.lower().split())
-        return f"{self.signal_type.value}:{workstream}:{slug}"
+        project = "-".join(self.project.lower().split())
+        return f"{self.signal_type.value}:{project}:{slug}"

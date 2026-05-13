@@ -9,7 +9,7 @@ from .schema import ContextContract
 
 DEFAULT_DIRS = [
     "00_inbox",
-    "01_workstreams",
+    "01_projects",
     "02_areas",
     "03_resources",
     "04_archives",
@@ -20,7 +20,7 @@ DEFAULT_DIRS = [
 
 ROOT_CONTEXT = """# GSD-AI Workspace
 
-This workspace stores durable goal/work context for AI-assisted execution.
+This workspace stores durable project context for AI-assisted execution.
 
 ## Operating principle
 
@@ -29,7 +29,7 @@ AI interprets. Code enforces. Humans approve durable writes.
 ## Layout
 
 - `00_inbox/` — unprocessed captures
-- `01_workstreams/` — active goals, projects, and workstreams
+- `01_projects/` — active projects
 - `02_areas/` — ongoing responsibilities
 - `03_resources/` — reusable references
 - `04_archives/` — completed or inactive work
@@ -57,7 +57,7 @@ def init_workspace(path: Path, *, force: bool = False) -> list[Path]:
 
     index = path / ".gsd-ai" / "index.json"
     if force or not index.exists():
-        index.write_text(json.dumps({"version": 1, "workstreams": []}, indent=2) + "\n", encoding="utf-8")
+        index.write_text(json.dumps({"version": 1, "projects": []}, indent=2) + "\n", encoding="utf-8")
         created.append(index)
 
     audit = path / ".gsd-ai" / "audit.jsonl"
@@ -68,23 +68,23 @@ def init_workspace(path: Path, *, force: bool = False) -> list[Path]:
     return created
 
 
-def create_workstream(path: Path, name: str, *, purpose: str = "") -> Path:
-    """Create a workstream context contract."""
+def create_project(path: Path, name: str, *, purpose: str = "") -> Path:
+    """Create a project context contract."""
 
     path = path.expanduser().resolve()
     slug = "-".join(name.lower().split())
-    workstream_dir = path / "01_workstreams" / slug
-    workstream_dir.mkdir(parents=True, exist_ok=True)
+    project_dir = path / "01_projects" / slug
+    project_dir.mkdir(parents=True, exist_ok=True)
 
     contract = ContextContract(name=name, purpose=purpose)
-    contract_path = workstream_dir / "context.md"
+    contract_path = project_dir / "context.md"
     if contract_path.exists():
-        raise FileExistsError(f"Workstream already exists: {contract_path}")
+        raise FileExistsError(f"Project already exists: {contract_path}")
     contract_path.write_text(contract.to_markdown(), encoding="utf-8")
 
     index_path = path / ".gsd-ai" / "index.json"
     index = json.loads(index_path.read_text(encoding="utf-8"))
-    index.setdefault("workstreams", []).append({"name": name, "slug": slug, "path": str(contract_path.relative_to(path)), "status": "active"})
+    index.setdefault("projects", []).append({"name": name, "slug": slug, "path": str(contract_path.relative_to(path)), "status": "active"})
     index_path.write_text(json.dumps(index, indent=2) + "\n", encoding="utf-8")
 
     return contract_path

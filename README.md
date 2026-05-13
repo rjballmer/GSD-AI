@@ -71,8 +71,8 @@ Verification around AI-generated signals, writes, scheduled jobs, public exports
 Built today:
 
 - local workspace generator
-- goal/workstream context contract
-- workstream creation command
+- project context contract
+- project creation command
 - machine-readable workspace index
 - signal and scope primitives
 - unit tests for workspace creation, context rendering, and signal fingerprinting

@@ -24,15 +24,15 @@ Build the durable execution substrate.
 
 User stories:
 
-- As a worker managing multiple goals or workstreams, I want durable context so I can resume without reconstructing everything from memory.
+- As a worker managing multiple projects, I want durable context so I can resume without reconstructing everything from memory.
 - As an AI assistant user, I want context stored in inspectable files so I can trust and edit it.
 - As an owner, I want current status, decisions, risks, dependencies, actions, and open questions in one place.
 
 Deliverables:
 
 - workspace generator
-- workstream index
-- goal/work context contract
+- project index
+- project context contract
 - scope labels
 - manual add-context workflow
 - resume-from-here status
@@ -54,7 +54,7 @@ Deliverables:
 - end-session update
 - weekly recap
 - health check
-- archive/stale workstream workflow
+- archive/stale project workflow
 - public-safe export workflow
 
 ## Phase 3 — Signal capture

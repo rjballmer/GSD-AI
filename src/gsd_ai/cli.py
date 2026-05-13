@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .workspace import create_workstream, init_workspace
+from .workspace import create_project, init_workspace
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -16,9 +16,9 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("path", type=Path)
     init.add_argument("--force", action="store_true", help="Overwrite generated root/index files.")
 
-    workstream = sub.add_parser("workstream", help="Manage workstreams.")
-    workstream_sub = workstream.add_subparsers(dest="workstream_command", required=True)
-    create = workstream_sub.add_parser("create", help="Create a workstream context contract.")
+    project = sub.add_parser("project", help="Manage projects.")
+    project_sub = project.add_subparsers(dest="project_command", required=True)
+    create = project_sub.add_parser("create", help="Create a project context contract.")
     create.add_argument("workspace", type=Path)
     create.add_argument("name")
     create.add_argument("--purpose", default="")
@@ -37,9 +37,9 @@ def main(argv: list[str] | None = None) -> int:
             print(f"- {path}")
         return 0
 
-    if args.command == "workstream" and args.workstream_command == "create":
-        path = create_workstream(args.workspace, args.name, purpose=args.purpose)
-        print(f"Created workstream context: {path}")
+    if args.command == "project" and args.project_command == "create":
+        path = create_project(args.workspace, args.name, purpose=args.purpose)
+        print(f"Created project context: {path}")
         return 0
 
     parser.error("Unknown command")

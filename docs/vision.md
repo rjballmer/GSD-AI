@@ -23,7 +23,7 @@ Short version:
 
 ## The user experience we are aiming for
 
-You should be able to come back to a goal or workstream after two weeks and ask:
+You should be able to come back to a goal or project after two weeks and ask:
 
 > Where did I leave off, and what should I do next?
 

@@ -6,13 +6,13 @@ GSD-AI starts with a small set of primitives.
 
 A durable outcome the user is trying to move forward.
 
-## Workstream
+## Project
 
-A continuing body of work connected to a goal, project, area, or responsibility.
+The primary container for a body of work connected to a goal, initiative, deliverable, or responsibility.
 
 ## Context contract
 
-The compact, AI-readable state of a workstream:
+The compact, AI-readable state of a project:
 
 - purpose
 - current status
