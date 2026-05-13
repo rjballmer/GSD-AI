@@ -1,11 +1,15 @@
-# Project Creation Model
+# Project Lifecycle Model
 
-GSD-AI project creation should be a workflow, not just a folder generator.
-
-The reference architecture is strong because it treats project creation as the beginning of an AI-assisted context loop:
+GSD-AI should expose a small set of simple primitives:
 
 ```text
-Trigger → Infer → Create → Enrich → Confirm → Track → Resume
+Initialize workspace → Create project → Update project → Review projects
+```
+
+The reference architecture is strong because it treats project management as an AI-assisted context loop, not a folder generator:
+
+```text
+Capture context → Infer signals → Propose updates → Confirm → Track → Resume
 ```
 
 ## Design principles
@@ -84,21 +88,26 @@ From links, session context, or pasted notes, extract:
 
 These should be proposed for review before becoming durable context.
 
-### 5. Separate immediate creation from enrichment
+### 5. Keep public primitives simple
 
-Project creation should be fast. Enrichment can be deeper and optional.
+Avoid exposing a separate `enrich` concept unless it proves necessary. Users should not need to distinguish between "enriching" and "updating" a project.
 
-Recommended flow:
+Use one public verb:
 
 ```text
-Phase 1: Create minimal project immediately
-Phase 2: Gather/enrich context from sources
-Phase 3: Present proposed extracted signals
-Phase 4: Apply approved updates
-Phase 5: Create initial actions/tasks if user confirms
+update
 ```
 
-This preserves momentum without sacrificing context quality.
+Project updates can come from many sources:
+
+- new docs or links
+- meeting notes
+- current AI session
+- Wakesurfer-style captured signals
+- weekly review sweep
+- manual notes
+
+The system can internally decide whether it is filling missing context, appending new signals, resolving old actions, or producing a weekly summary.
 
 ## Proposed command surfaces
 
@@ -128,21 +137,21 @@ gsd-ai project create-from-session ~/Workspace "optional name hint"
 
 Uses recent session context as the project origin story.
 
-### Enrich existing project
+### Update project
 
 ```bash
-gsd-ai project enrich ~/Workspace "Project Name"
+gsd-ai project update ~/Workspace "Project Name"   --source <url-or-path>   --from-session
 ```
 
-Reads recorded sources, proposes structured project signals, and asks for approval before updating durable context.
+Reads new context, proposes structured project signals, and asks for approval before updating durable context.
 
-### Update from session
+### Review projects
 
 ```bash
-gsd-ai project update-from-session ~/Workspace "Project Name"
+gsd-ai review weekly ~/Workspace
 ```
 
-Extracts what changed in the current session and appends session notes, findings, decisions, outputs, and follow-ups.
+Sweeps projects for missed updates, stale actions, unresolved risks, waiting items, missing source processing, and projects that have gone quiet.
 
 ## Recommended project folder
 
@@ -247,13 +256,13 @@ GSD-AI owns the project ontology, source registry, signal extraction flow, appro
 
 - `signals.jsonl`
 - source registry schema
-- `project enrich` command skeleton
+- `project update` command skeleton
 - proposed signal output format
 - approval queue file
 
 ### v0.3
 
-- `create-from-session`
+- `project update --from-session`
 - topic-boundary extraction prompt
 - session note creation
 - `sessions/YYYY-MM-DD-N.md`
