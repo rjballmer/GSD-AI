@@ -86,7 +86,7 @@ Next milestone:
 4. `gsd-ai status` / resume-from-here command
 5. audit trail for approved writes
 
-See [`docs/frameworks.md`](docs/frameworks.md) for framework guidance and [`docs/roadmap.md`](docs/roadmap.md) for the phased build plan.
+See [`docs/frameworks.md`](docs/frameworks.md) for framework guidance, [`docs/project-creation-model.md`](docs/project-creation-model.md) for the source-link/session-first project creation model, and [`docs/roadmap.md`](docs/roadmap.md) for the phased build plan.
 
 ## What this is not
 
