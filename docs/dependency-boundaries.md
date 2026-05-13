@@ -1,6 +1,6 @@
 # Dependency Boundaries
 
-ProjectOS should not rebuild every app integration.
+GSD-AI should not rebuild every app integration.
 
 It assumes host environments may already provide tools, APIs, MCP servers, or adapters for common systems.
 
@@ -14,11 +14,11 @@ It assumes host environments may already provide tools, APIs, MCP servers, or ad
 - notification delivery: chat, email, push, CLI
 - auth/session handling: OAuth, browser sessions, keychain, local config, environment tokens
 
-## What ProjectOS adds
+## What GSD-AI adds
 
-ProjectOS provides the orchestration layer:
+GSD-AI provides the orchestration layer:
 
-- project memory
+- durable goal/work context
 - signal schema
 - routing
 - deduplication
@@ -30,5 +30,5 @@ In other words:
 
 ```text
 existing adapters provide access
-ProjectOS provides work-context intelligence and control
+GSD-AI provides execution intelligence and control
 ```

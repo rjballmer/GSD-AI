@@ -5,59 +5,59 @@ This roadmap is intentionally staged. The build order is different from the prod
 The product loop is:
 
 ```text
-Capture → Brain → Time → Verify
+Capture → Context → Plan → Time → Verify
 ```
 
 The build order is:
 
 ```text
-1. Brain / storage substrate
+1. Goal/work context substrate
 2. Management workflows
 3. Signal capture automation
 4. Calendar / execution management
 5. Trust, verification, and controls
 ```
 
-## Phase 1 — ProjectOS Core
+## Phase 1 — Core context
 
-Build the durable project substrate.
+Build the durable execution substrate.
 
 User stories:
 
-- As a worker managing multiple projects, I want durable project memory so I can resume without reconstructing context.
+- As a worker managing multiple goals or workstreams, I want durable context so I can resume without reconstructing everything from memory.
 - As an AI assistant user, I want context stored in inspectable files so I can trust and edit it.
-- As a project owner, I want current status, decisions, risks, dependencies, actions, and open questions in one place.
+- As an owner, I want current status, decisions, risks, dependencies, actions, and open questions in one place.
 
 Deliverables:
 
 - workspace generator
-- project index
-- project context contract
+- workstream index
+- goal/work context contract
 - scope labels
 - manual add-context workflow
 - resume-from-here status
 - local audit log
 
-## Phase 2 — Management Skills
+## Phase 2 — Management workflows
 
-Make the project brain operational.
+Make the context operational.
 
 User stories:
 
 - As a user preparing for a meeting, I want relevant risks, decisions, and actions surfaced automatically.
-- As a user ending a session, I want project state updated with what changed.
-- As a user reviewing the week, I want a recap generated from project memory.
+- As a user ending a session, I want work state updated with what changed.
+- As a user reviewing the week, I want a recap generated from durable context.
 
 Deliverables:
 
 - meeting prep
 - end-session update
 - weekly recap
-- project health check
-- archive/stale project workflow
+- health check
+- archive/stale workstream workflow
 - public-safe export workflow
 
-## Phase 3 — Signal Capture
+## Phase 3 — Signal capture
 
 Add structured signal ingestion.
 
@@ -77,7 +77,7 @@ Deliverables:
 - noise learning
 - later: adapters for chat, email, docs, calendar notes, tickets
 
-## Phase 4 — ProjectOS Time
+## Phase 4 — Time and execution
 
 Turn actions into protected execution time.
 
@@ -96,7 +96,7 @@ Deliverables:
 - calendar writeback
 - scheduling preference learning
 
-## Phase 5 — AgentOS Controls
+## Phase 5 — AgentOS controls
 
 Add trust and verification around AI-generated work.
 

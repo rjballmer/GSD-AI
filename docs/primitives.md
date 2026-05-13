@@ -1,14 +1,18 @@
 # Core Primitives
 
-ProjectOS starts with a small set of primitives.
+GSD-AI starts with a small set of primitives.
 
-## Project
+## Goal
 
-A durable unit of work with purpose, state, references, and outcomes.
+A durable outcome the user is trying to move forward.
 
-## Project brain
+## Workstream
 
-The compact, AI-readable state of a project:
+A continuing body of work connected to a goal, project, area, or responsibility.
+
+## Context contract
+
+The compact, AI-readable state of a workstream:
 
 - purpose
 - current status

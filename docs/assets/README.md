@@ -1,10 +1,10 @@
 # Assets
 
-Draft visual assets for ProjectOS.
+Draft visual assets for GSD-AI.
 
-- `projectos-infographic.notebooklm-draft.png` — generated concept draft. Review for typos, terminology, third-party logo/licensing, and accessibility before treating as public-final.
+The previous NotebookLM draft was removed because the repo is shifting to GSD-AI language. Add a new draft here when the visual is regenerated.
 
-Final published assets should use:
+Suggested final assets:
 
-- `projectos-infographic.png`
-- `projectos-infographic.alt.md`
+- `gsd-ai-infographic.png`
+- `gsd-ai-infographic.alt.md`

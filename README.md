@@ -1,12 +1,12 @@
-# ProjectOS
+# GSD-AI
 
-**ProjectOS is an early-stage work-context operating layer for AI-assisted knowledge work.**
+**GSD-AI is an early-stage AI-native execution system for converting work signals into goals, plans, protected time, and impact.**
 
 Modern work leaks context. Decisions hide in meetings. Risks show up once in chat and vanish. Tasks sit in one system while calendars fill from another. AI assistants help in the moment, but they usually start cold the next time.
 
-ProjectOS is an attempt to close that loop:
+GSD-AI is an attempt to close that loop:
 
-> **Capture the signal. Build the project brain. Protect the time. Verify the work.**
+> **Capture the signal. Clarify the goal. Build the plan. Protect the time. Verify the work.**
 
 This repository is intentionally early. The first public work here is product architecture, primitives, and prototype scaffolding. Code will follow the model below.
 
@@ -17,9 +17,9 @@ Work surfaces
   ↓
 Capture important signals
   ↓
-Maintain durable project memory
+Translate signals into goals and plans
   ↓
-Turn actions into protected calendar time
+Protect time for execution
   ↓
 Verify AI-generated updates and writes
 ```
@@ -34,21 +34,21 @@ Most productivity tools manage one slice of work:
 - chat contains decisions
 - AI assistants generate helpful fragments
 
-The hard part is not having these tools. The hard part is keeping the work state coherent across them.
+The hard part is not having these tools. The hard part is keeping the execution state coherent across them.
 
-ProjectOS focuses on the layer between tools: structured project memory, signal routing, approval queues, task-to-time planning, and verification.
+GSD-AI focuses on the layer between tools: structured goal context, signal routing, approval queues, task-to-time planning, and verification.
 
 ## Modules
 
-### ProjectOS Core
+### GSD-AI Core
 
-Durable project brains: project context, status, decisions, risks, dependencies, actions, open questions, references, and scope labels.
+Durable goal and work context: current state, decisions, risks, dependencies, actions, open questions, references, and scope labels.
 
-### ProjectOS Capture
+### GSD-AI Capture
 
 Signal capture from meetings, chats, docs, tickets, and pasted notes. The system extracts structured signals such as decisions, risks, actions, dependencies, and context shifts.
 
-### ProjectOS Time
+### GSD-AI Time
 
 Task-to-calendar planning. Approved actions become schedulable tasks, then protected work blocks.
 
@@ -60,8 +60,8 @@ Verification around AI-generated signals, writes, scheduled jobs, public exports
 
 - **AI interprets. Code enforces.** Use models for messy context; use code for schemas, routing, deduplication, calendar math, writes, and audit.
 - **Human approval at write boundaries.** The agent proposes. The human decides.
-- **Local-first memory.** Project state should be inspectable, portable, and editable.
-- **Adapters over app lock-in.** ProjectOS should orchestrate existing Slack, Teams, calendar, task, doc, and repo integrations rather than rebuild them.
+- **Local-first memory.** Work state should be inspectable, portable, and editable.
+- **Adapters over app lock-in.** GSD-AI should orchestrate existing Slack, Teams, calendar, task, doc, and repo integrations rather than rebuild them.
 - **Trust is earned.** Start in review mode; promote automation only after evidence.
 
 ## Current status
@@ -71,7 +71,7 @@ This repo is in the architecture/prototype phase.
 Planned first milestone:
 
 1. local workspace generator
-2. project context contract
+2. goal/work context contract
 3. signal schema and registry
 4. manual capture from pasted notes/files
 5. approval queue
@@ -87,7 +87,7 @@ See [`docs/roadmap.md`](docs/roadmap.md) for the phased build plan.
 - not an autonomous agent that writes everywhere by default
 - not tied to one chat, docs, or calendar vendor
 
-ProjectOS is the connective tissue between those systems.
+GSD-AI is execution infrastructure between those systems.
 
 ## License
 
