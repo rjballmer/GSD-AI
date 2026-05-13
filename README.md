@@ -70,9 +70,9 @@ Verification around AI-generated signals, writes, scheduled jobs, public exports
 
 Built today:
 
-- local workspace generator with `gsd` and `para` framework choices
+- local workspace generator with recommended `para` and optional `gsd` framework choices
 - interactive framework prompt plus non-interactive `--framework` flag
-- project context contract
+- project context contract with source-link capture via `--source` and `--doc`
 - project creation command
 - machine-readable workspace index
 - signal and scope primitives
@@ -86,7 +86,7 @@ Next milestone:
 4. `gsd-ai status` / resume-from-here command
 5. audit trail for approved writes
 
-See [`docs/roadmap.md`](docs/roadmap.md) for the phased build plan.
+See [`docs/frameworks.md`](docs/frameworks.md) for framework guidance and [`docs/roadmap.md`](docs/roadmap.md) for the phased build plan.
 
 ## What this is not
 

@@ -30,9 +30,9 @@ User stories:
 
 Deliverables:
 
-- workspace generator with `gsd` and `para` framework choices
+- workspace generator with recommended `para` and optional `gsd` framework choices
 - project index
-- project context contract
+- project context contract with source-link capture
 - scope labels
 - manual add-context workflow
 - resume-from-here status

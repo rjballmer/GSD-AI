@@ -28,6 +28,19 @@ class SignalType(str, Enum):
 
 
 @dataclass(frozen=True)
+class ContextSource:
+    """User-provided source material for AI-assisted project setup."""
+
+    value: str
+    source_type: str = "link"
+    note: str = ""
+
+    def to_markdown(self) -> str:
+        suffix = f" — {self.note}" if self.note else ""
+        return f"- [{self.source_type}] {self.value}{suffix}"
+
+
+@dataclass(frozen=True)
 class ContextContract:
     """Durable, inspectable state for a project."""
 
@@ -42,6 +55,7 @@ class ContextContract:
     actions: list[str] = field(default_factory=list)
     open_questions: list[str] = field(default_factory=list)
     references: list[str] = field(default_factory=list)
+    context_sources: list[ContextSource] = field(default_factory=list)
 
     def to_markdown(self) -> str:
         sections: list[tuple[str, list[str] | str]] = [
@@ -55,6 +69,7 @@ class ContextContract:
             ("Actions", self.actions),
             ("Open questions", self.open_questions),
             ("Key references", self.references),
+            ("Context sources", [source.to_markdown().removeprefix("- ") for source in self.context_sources]),
         ]
         lines = [f"# {self.name}", ""]
         for heading, value in sections:
