@@ -6,42 +6,80 @@ GSD-AI should expose a small set of simple primitives:
 Initialize workspace → Create project → Update project → Review projects
 ```
 
-The reference architecture is strong because it treats project management as an AI-assisted context loop, not a folder generator:
+The point is not to invent a complicated project-management vocabulary. The point is to make it easy for AI to help keep project context current, useful, and moving.
 
-```text
-Capture context → Infer signals → Propose updates → Confirm → Track → Resume
+## The three core actions
+
+### Create
+
+**Create is an invoked skill.**
+
+The user explicitly starts it when a project deserves a durable home.
+
+Create should be primarily based on linked content, not a manually typed charter. In real work, the context already exists in docs, tickets, meeting notes, chat threads, dashboards, repo links, or prior AI sessions.
+
+Create does three things:
+
+1. creates the project structure
+2. records source links/context
+3. proposes the first project signals for review
+
+Create should bias toward momentum: create the project first when enough signal exists, then refine.
+
+### Update
+
+**Update is how project memory changes.**
+
+Updates can arrive through two paths:
+
+1. **Captured signals** — Wakesurfer-style signal capture from meetings, chats, docs, tickets, email, and other work surfaces.
+2. **Invoked updates** — the user explicitly adds context that automated capture missed, usually by dropping linked docs/content.
+
+Update should merge new context into the project state after user review. It can add or change:
+
+- decisions
+- risks
+- dependencies
+- actions
+- mitigations
+- context shifts
+- open questions
+- source links
+- session notes
+
+Update is the one public verb. Do not expose a separate `enrich` action.
+
+### Review
+
+**Review is an invoked AI inspection of current project state.**
+
+Review is not just a recap. It should inspect the project and help keep it moving forward.
+
+A review should look for:
+
+- stale actions
+- unresolved risks
+- waiting/dependency items
+- open decisions
+- quiet projects
+- unprocessed source links
+- contradictions or outdated context
+- missing next steps
+- opportunities to schedule work
+
+Review can happen on demand or as a weekly ritual:
+
+```bash
+gsd-ai review weekly ~/Workspace
 ```
+
+Review should produce recommendations, not silently rewrite project state.
 
 ## Design principles
 
-### 1. Create first, refine after
-
-When a user says they want to start a project, they usually want momentum. Do not make them fill out a full charter before anything exists.
-
-Default behavior:
-
-1. infer a project name and one-line purpose from the user input or source links
-2. create the project structure immediately
-3. record whatever context is available
-4. offer enrichment as the next step
-
-Only ask a clarifying question if there is truly no usable project signal.
-
-### 2. Source-link-first, not charter-first
+### 1. Source-link-first, not charter-first
 
 Users should not have to type a project charter into a CLI.
-
-In real work, context already exists in:
-
-- planning docs
-- design docs
-- meeting notes
-- tickets/issues
-- PRDs
-- dashboards
-- chat threads
-- repo links
-- prior AI sessions
 
 The project creation command should encourage users to drop links and let AI propose the initial project signals.
 
@@ -55,6 +93,19 @@ gsd-ai project create ~/Workspace "Billing Migration" \
   --source https://github.com/acme/platform/pull/456
 ```
 
+### 2. Create first, refine after
+
+When a user invokes Create, they usually want a project container now. Do not make them fill out a long form first.
+
+Default behavior:
+
+1. infer a project name and one-line purpose from user input or source links
+2. create the project structure immediately
+3. record available source context
+4. propose first signals for review
+
+Only ask a clarifying question if there is truly no usable project signal.
+
 ### 3. Session context is a first-class source
 
 Sometimes the current AI conversation *is* the project brief. The user should be able to say:
@@ -67,9 +118,37 @@ The agent should scan backward from the current moment, identify the relevant to
 
 Do not blindly summarize the whole session.
 
-### 4. Extract structured project signals
+### 4. Update absorbs both automated and manual context
 
-From links, session context, or pasted notes, extract:
+Wakesurfer-style capture is one input to Update. It should not be the only path.
+
+Users also need an invoked update path for context that automation missed:
+
+```bash
+gsd-ai project update ~/Workspace "Billing Migration" \
+  --doc https://docs.example.com/new-cutover-plan \
+  --source https://slack.example.com/thread/123
+```
+
+Update should produce proposed signal changes and ask for approval before durable writes.
+
+### 5. Review is the larger net
+
+Automated capture will miss things. Manual updates will be incomplete. Review is the larger process that inspects project state and catches drift.
+
+A weekly review should answer:
+
+- What changed?
+- What is stale?
+- What is blocked?
+- What decisions are still open?
+- What actions lack owners or time?
+- What source links were never processed?
+- What should happen next?
+
+## Extracted project signals
+
+From links, session context, captured signals, or pasted notes, extract:
 
 - project name
 - one-line description
@@ -88,48 +167,20 @@ From links, session context, or pasted notes, extract:
 
 These should be proposed for review before becoming durable context.
 
-### 5. Keep public primitives simple
-
-Avoid exposing a separate `enrich` concept unless it proves necessary. Users should not need to distinguish between "enriching" and "updating" a project.
-
-Use one public verb:
-
-```text
-update
-```
-
-Project updates can come from many sources:
-
-- new docs or links
-- meeting notes
-- current AI session
-- Wakesurfer-style captured signals
-- weekly review sweep
-- manual notes
-
-The system can internally decide whether it is filling missing context, appending new signals, resolving old actions, or producing a weekly summary.
-
 ## Proposed command surfaces
 
-### Minimal create
-
-```bash
-gsd-ai project create ~/Workspace "Project Name" --purpose "One-line purpose"
-```
-
-Creates project structure and a context contract.
-
-### Source-backed create
+### Create project
 
 ```bash
 gsd-ai project create ~/Workspace "Project Name" \
+  --purpose "One-line purpose" \
   --doc <url-or-path> \
   --source <url-or-path>
 ```
 
-Creates project structure and records context sources for AI extraction.
+Creates project structure, records context sources, and prepares for AI-assisted signal extraction.
 
-### Session-backed create
+### Create project from session
 
 ```bash
 gsd-ai project create-from-session ~/Workspace "optional name hint"
@@ -140,10 +191,12 @@ Uses recent session context as the project origin story.
 ### Update project
 
 ```bash
-gsd-ai project update ~/Workspace "Project Name"   --source <url-or-path>   --from-session
+gsd-ai project update ~/Workspace "Project Name" \
+  --source <url-or-path> \
+  --from-session
 ```
 
-Reads new context, proposes structured project signals, and asks for approval before updating durable context.
+Reads new context, proposes structured project signal changes, and asks for approval before updating durable context.
 
 ### Review projects
 
@@ -151,7 +204,7 @@ Reads new context, proposes structured project signals, and asks for approval be
 gsd-ai review weekly ~/Workspace
 ```
 
-Sweeps projects for missed updates, stale actions, unresolved risks, waiting items, missing source processing, and projects that have gone quiet.
+Sweeps project state to find missed context, stale actions, unresolved risks, waiting items, unprocessed sources, and quiet projects.
 
 ## Recommended project folder
 
@@ -173,11 +226,11 @@ Each project should eventually look like:
 
 The initial v0.1 implementation may only create `context.md` and `sources.json`, but the architecture should aim here.
 
-## AI extraction model
+## AI proposal model
 
 AI should propose, not silently mutate.
 
-For any source-backed or session-backed enrichment, present:
+For Create, Update, or Review, present proposed changes in a reviewable form:
 
 ```text
 Proposed Project Signals
@@ -212,6 +265,7 @@ AI should handle:
 - summarizing project purpose
 - extracting candidate signals
 - proposing next actions
+- inspecting project state during review
 
 Code should handle:
 
@@ -240,7 +294,7 @@ It should rely on existing adapters, host tools, or MCP servers for:
 - repo access
 - calendar/task integrations
 
-GSD-AI owns the project ontology, source registry, signal extraction flow, approval queue, and durable project memory.
+GSD-AI owns the project ontology, source registry, signal extraction flow, approval queue, review workflow, and durable project memory.
 
 ## Build sequence
 
@@ -269,11 +323,19 @@ GSD-AI owns the project ontology, source registry, signal extraction flow, appro
 
 ### v0.4
 
+- `review weekly`
+- stale action detection
+- unresolved risk/dependency report
+- unprocessed source detection
+- recommended next actions
+
+### v0.5
+
 - action extraction
 - action/task export adapters
 - optional calendar/time-block handoff
 
-### v0.5
+### v0.6
 
 - AgentOS-style verification:
   - source grounding checks

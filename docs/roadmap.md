@@ -38,28 +38,28 @@ Deliverables:
 - resume-from-here status
 - local audit log
 
-## Phase 2 — Management workflows
+## Phase 2 — Create / Update / Review workflows
 
-Make the context operational.
+Make the context operational through three simple actions.
 
 User stories:
 
-- As a user preparing for a meeting, I want relevant risks, decisions, and actions surfaced automatically.
-- As a user ending a session, I want work state updated with what changed.
-- As a user reviewing the week, I want a recap generated from durable context.
+- As a user starting a project, I want to invoke Create with links/docs instead of typing a project charter.
+- As a user with new context, I want Update to merge Wakesurfer-captured signals and manually supplied links into project memory after review.
+- As a user reviewing a project, I want Review to inspect current state, find stale or missing pieces, and recommend how to keep the project moving.
 
 Deliverables:
 
-- meeting prep
-- end-session update
-- weekly recap
-- health check
-- archive/stale project workflow
-- public-safe export workflow
+- source-link-first Create workflow
+- Update workflow for captured signals and invoked context additions
+- Review workflow for current-state inspection
+- proposed signal output format
+- approval queue
+- local audit log for approved writes
 
-## Phase 3 — Signal capture
+## Phase 3 — Automated signal capture
 
-Add structured signal ingestion.
+Add Wakesurfer-style structured signal ingestion.
 
 User stories:
 
