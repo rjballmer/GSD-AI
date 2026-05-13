@@ -206,6 +206,44 @@ gsd-ai review weekly ~/Workspace
 
 Sweeps project state to find missed context, stale actions, unresolved risks, waiting items, unprocessed sources, and quiet projects.
 
+
+## Scheduling model
+
+Every skill should be schedulable.
+
+A skill should be callable in two modes:
+
+```text
+manual invocation → user asks now
+scheduled invocation → system runs at a configured cadence
+```
+
+This applies to Create, Update, Review, and future skills, but Review is the most natural scheduled workflow.
+
+Examples:
+
+```bash
+gsd-ai schedule add "weekly project review"   --skill review.weekly   --workspace ~/Workspace   --cron "0 9 * * MON"
+
+gsd-ai schedule add "daily signal update"   --skill project.update   --workspace ~/Workspace   --source captured-signals   --cron "0 16 * * *"
+```
+
+Scheduled skills should still respect the same control model:
+
+- declare inputs
+- declare output artifact
+- run with scoped permissions
+- produce a reviewable summary
+- avoid silent durable writes unless explicitly configured
+- record audit state
+- surface failures or empty runs
+
+Default recommendation:
+
+- **Create** — usually manual/invoked
+- **Update** — manual or triggered by captured signals
+- **Review** — manual or scheduled, commonly weekly
+
 ## Recommended project folder
 
 Both PARA and GSD frameworks keep projects under `01_projects/`.

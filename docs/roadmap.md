@@ -53,6 +53,7 @@ Deliverables:
 - source-link-first Create workflow
 - Update workflow for captured signals and invoked context additions
 - Review workflow for current-state inspection
+- schedule metadata model for manually invoked vs scheduled skills
 - proposed signal output format
 - approval queue
 - local audit log for approved writes
@@ -76,6 +77,7 @@ Deliverables:
 - fingerprint/dedup logic
 - noise learning
 - later: adapters for chat, email, docs, calendar notes, tickets
+- scheduled update runs from captured signal queues
 
 ## Phase 4 — Time and execution
 
