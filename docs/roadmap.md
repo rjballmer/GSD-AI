@@ -11,7 +11,7 @@ Capture → Context → Plan → Time → Verify
 The build order is:
 
 ```text
-1. Goal/work context substrate
+1. Project context substrate
 2. Management workflows
 3. Signal capture automation
 4. Calendar / execution management
@@ -30,7 +30,7 @@ User stories:
 
 Deliverables:
 
-- workspace generator
+- workspace generator with `gsd` and `para` framework choices
 - project index
 - project context contract
 - scope labels

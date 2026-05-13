@@ -70,7 +70,8 @@ Verification around AI-generated signals, writes, scheduled jobs, public exports
 
 Built today:
 
-- local workspace generator
+- local workspace generator with `gsd` and `para` framework choices
+- interactive framework prompt plus non-interactive `--framework` flag
 - project context contract
 - project creation command
 - machine-readable workspace index

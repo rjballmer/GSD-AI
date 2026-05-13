@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
-from .workspace import create_project, init_workspace
+from .workspace import DEFAULT_FRAMEWORK, FRAMEWORKS, create_project, framework_prompt, init_workspace
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -14,6 +15,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     init = sub.add_parser("init", help="Create a GSD-AI workspace.")
     init.add_argument("path", type=Path)
+    init.add_argument("--framework", choices=sorted(FRAMEWORKS), help="Workspace framework to create.")
     init.add_argument("--force", action="store_true", help="Overwrite generated root/index files.")
 
     project = sub.add_parser("project", help="Manage projects.")
@@ -26,13 +28,34 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def choose_framework(value: str | None) -> str:
+    """Use an explicit framework, prompt interactively, or default safely in non-interactive contexts."""
+
+    if value:
+        return value
+    if not sys.stdin.isatty():
+        return DEFAULT_FRAMEWORK
+
+    raw = input(framework_prompt()).strip().lower()
+    if raw in {"", "1"}:
+        return "gsd"
+    if raw == "2":
+        return "para"
+    if raw in FRAMEWORKS:
+        return raw
+
+    choices = ", ".join(sorted(FRAMEWORKS))
+    raise SystemExit(f"Unknown framework '{raw}'. Choose one of: {choices}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
     if args.command == "init":
-        created = init_workspace(args.path, force=args.force)
-        print(f"Initialized GSD-AI workspace at {args.path}")
+        framework = choose_framework(args.framework)
+        created = init_workspace(args.path, framework=framework, force=args.force)
+        print(f"Initialized GSD-AI workspace at {args.path} using framework: {framework}")
         for path in created:
             print(f"- {path}")
         return 0
