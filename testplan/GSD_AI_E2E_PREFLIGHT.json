@@ -1,0 +1,51 @@
+{
+  "plan": "testplan/GSD_AI_E2E_TEST_PLAN.md",
+  "score": {
+    "passed": 8,
+    "total": 8,
+    "score_pct": 100.0,
+    "failed": []
+  },
+  "checks": [
+    {
+      "name": "required_sections",
+      "passed": true,
+      "detail": "all required sections present"
+    },
+    {
+      "name": "two_week_daily_batches",
+      "passed": true,
+      "detail": "found 10 day batch headings; expected at least 10"
+    },
+    {
+      "name": "signal_type_coverage",
+      "passed": true,
+      "detail": "all 8 signal types mentioned"
+    },
+    {
+      "name": "module_coverage",
+      "passed": true,
+      "detail": "all module names present"
+    },
+    {
+      "name": "lifecycle_coverage",
+      "passed": true,
+      "detail": "core lifecycle terms present"
+    },
+    {
+      "name": "expected_json_examples",
+      "passed": true,
+      "detail": "expected JSON artifact references present"
+    },
+    {
+      "name": "agent_ops_3c_gates",
+      "passed": true,
+      "detail": "Claim/Confirm/Commit gates present"
+    },
+    {
+      "name": "pass_fail_gates",
+      "passed": true,
+      "detail": "MVP pass/fail gates present"
+    }
+  ]
+}
