@@ -6,8 +6,16 @@ import argparse
 import sys
 from pathlib import Path
 
-from .schema import ContextSource
-from .workspace import DEFAULT_FRAMEWORK, FRAMEWORKS, create_project, framework_prompt, init_workspace
+from .schema import ContextSource, SignalType
+from .workspace import (
+    DEFAULT_FRAMEWORK,
+    FRAMEWORKS,
+    approve_signal,
+    create_project,
+    framework_prompt,
+    init_workspace,
+    propose_signal,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -40,6 +48,25 @@ def build_parser() -> argparse.ArgumentParser:
         default=[],
         help="Alias for --source, intended for project/design/planning docs. Repeatable.",
     )
+
+    signals = sub.add_parser("signals", help="Propose and approve project signals.")
+    signals_sub = signals.add_subparsers(dest="signals_command", required=True)
+    propose = signals_sub.add_parser(
+        "propose",
+        help="Queue a structured signal for human approval without mutating durable signal state.",
+    )
+    propose.add_argument("workspace", type=Path)
+    propose.add_argument("project")
+    propose.add_argument("--type", required=True, choices=sorted(item.value for item in SignalType))
+    propose.add_argument("--summary", required=True)
+    propose.add_argument("--source", required=True)
+    propose.add_argument("--source-span", default="")
+    propose.add_argument("--confidence", default="medium")
+
+    approve = signals_sub.add_parser("approve", help="Approve a proposed signal into signals.jsonl.")
+    approve.add_argument("workspace", type=Path)
+    approve.add_argument("project")
+    approve.add_argument("signal_id")
 
     return parser
 
@@ -95,6 +122,27 @@ def main(argv: list[str] | None = None) -> int:
             print("Next: ask your AI assistant to read these sources and propose goals, risks, decisions, dependencies, actions, and open questions before writing durable updates.")
         else:
             print("Tip: add --source or --doc links so AI can infer project signals instead of making you type a full charter.")
+        return 0
+
+    if args.command == "signals" and args.signals_command == "propose":
+        signal = propose_signal(
+            args.workspace,
+            args.project,
+            SignalType(args.type),
+            args.summary,
+            source=args.source,
+            source_span=args.source_span,
+            confidence=args.confidence,
+        )
+        print(f"Queued signal proposal: {signal.signal_id}")
+        print(f"- fingerprint: {signal.fingerprint}")
+        print("Next: review it, then approve with gsd-ai signals approve if it should become durable state.")
+        return 0
+
+    if args.command == "signals" and args.signals_command == "approve":
+        signal = approve_signal(args.workspace, args.project, args.signal_id)
+        print(f"Approved signal: {signal.signal_id}")
+        print(f"- wrote durable signal fingerprint: {signal.fingerprint}")
         return 0
 
     parser.error("Unknown command")

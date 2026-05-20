@@ -1,6 +1,6 @@
 # GSD-AI
 
-**GSD-AI is an early-stage AI-native execution system for converting work signals into goals, plans, protected time, and impact.**
+**GSD-AI is an early-stage architecture and local-first prototype for converting work signals into goals, plans, protected time, and impact.**
 
 Modern work leaks context. Decisions hide in meetings. Risks show up once in chat and vanish. Tasks sit in one system while calendars fill from another. AI assistants help in the moment, but they usually start cold the next time.
 
@@ -8,7 +8,7 @@ GSD-AI is an attempt to close that loop:
 
 > **Capture the signal. Clarify the goal. Build the plan. Protect the time. Verify the work.**
 
-This repository is intentionally early. The first public work here is product architecture, primitives, and prototype scaffolding. Code will follow the model below.
+This repository is intentionally early. The current code is a local-first substrate prototype; the full execution loop is being built incrementally.
 
 ## The loop
 
@@ -76,15 +76,17 @@ Built today:
 - project creation command
 - machine-readable workspace index
 - signal and scope primitives
-- unit tests for workspace creation, context rendering, and signal fingerprinting
+- manual signal proposal and approval path
+- append-only signal and audit JSONL writes
+- unit tests for workspace creation, context rendering, signal fingerprinting, proposal, approval, and audit behavior
 
 Next milestone:
 
-1. signal registry
-2. manual capture from pasted notes/files
-3. approval queue
-4. `gsd-ai status` / resume-from-here command
-5. audit trail for approved writes
+1. executable E2E fixtures: daily inputs, expected JSON, schemas, and scorer
+2. manual capture from pasted notes/files into proposed signals
+3. project update and review commands
+4. stronger dedupe/collision handling with source grounding
+5. status / resume-from-here command
 
 See [`docs/frameworks.md`](docs/frameworks.md) for framework guidance, [`docs/project-creation-model.md`](docs/project-creation-model.md) for the source-link/session-first project creation model, and [`docs/roadmap.md`](docs/roadmap.md) for the phased build plan.
 

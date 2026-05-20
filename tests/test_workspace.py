@@ -9,8 +9,8 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from gsd_ai.cli import choose_framework, context_sources
-from gsd_ai.schema import ContextContract, ContextSource, Signal, SignalType
-from gsd_ai.workspace import FRAMEWORKS, create_project, init_workspace
+from gsd_ai.schema import ApprovalStatus, ContextContract, ContextSource, Signal, SignalType
+from gsd_ai.workspace import FRAMEWORKS, approve_signal, create_project, init_workspace, propose_signal, read_jsonl
 
 
 class WorkspaceTests(unittest.TestCase):
@@ -100,12 +100,65 @@ class WorkspaceTests(unittest.TestCase):
     def test_signal_fingerprint_is_stable_shape(self):
         signal = Signal(
             signal_type=SignalType.ACTION,
-            summary="Draft the initial workspace generator",
+            summary="Draft the initial workspace generator!",
             project="GSD-AI",
             source="manual-test",
         )
 
         self.assertEqual(signal.fingerprint, "action:gsd-ai:draft-the-initial-workspace-generator")
+        self.assertTrue(signal.signal_id.startswith("sig_"))
+
+    def test_signal_proposal_and_approval_write_jsonl_and_audit(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            init_workspace(tmp_path, framework="para")
+            create_project(tmp_path, "Launch GSD-AI")
+
+            proposed = propose_signal(
+                tmp_path,
+                "Launch GSD-AI",
+                SignalType.RISK,
+                "PDF export is the long pole",
+                source="meeting-notes.md",
+                source_span="line 12",
+            )
+            project_dir = tmp_path / "01_projects" / "launch-gsd-ai"
+            proposals = read_jsonl(project_dir / "signal_proposals.jsonl")
+
+            self.assertEqual(len(proposals), 1)
+            self.assertEqual(proposals[0]["status"], ApprovalStatus.PROPOSED.value)
+            self.assertEqual(proposals[0]["source_span"], "line 12")
+
+            approved = approve_signal(tmp_path, "launch-gsd-ai", proposed.signal_id)
+            signals = read_jsonl(project_dir / "signals.jsonl")
+            audit = read_jsonl(tmp_path / ".gsd-ai" / "audit.jsonl")
+
+            self.assertEqual(approved.status, ApprovalStatus.APPROVED)
+            self.assertEqual(len(signals), 1)
+            self.assertEqual(signals[0]["status"], ApprovalStatus.APPROVED.value)
+            self.assertEqual([event["event_type"] for event in audit], ["signal.proposed", "signal.approved"])
+
+    def test_duplicate_signal_proposal_is_rejected(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            init_workspace(tmp_path)
+            create_project(tmp_path, "Launch GSD-AI")
+
+            kwargs = {
+                "path": tmp_path,
+                "project": "Launch GSD-AI",
+                "signal_type": SignalType.ACTION,
+                "summary": "Schedule parser retest",
+                "source": "day-3.md",
+            }
+            propose_signal(**kwargs)
+
+            with self.assertRaises(ValueError):
+                propose_signal(**kwargs)
 
 
 if __name__ == "__main__":
